@@ -2,10 +2,15 @@
 const dgram = require('dgram');
 // Let's create a datagram socket. We will use it to send our UDP datagrams
 const s = dgram.createSocket('udp4');
+// UUID | npm install uuid
+const uuidv1 = require('uuid/v1');
+// Moment | npm install moment --save
+var moment = require('moment');
 // Protocol port
 const PROTOCOL_PORT = 9907;
 // Multicast address
 const PROTOCOL_MULTICAST_ADDRESS = "239.255.22.5";
+
 
 // Set all instrument that have sound
 var soundInstrument = new Map();
@@ -17,14 +22,20 @@ soundInstrument.set("drum", "boum-boum");
 
 // Class Instrument who will assigne the sound of choosen intrument
 function Instrument(name){
-  this.instrument = name;
+  this.uuid = uuidv1();
   this.sound = soundInstrument.get(name);
+  this.date = moment().format(); 
+
   Instrument.prototype.sendingSound = function(){
-      // Define the instrument
-    const instrumentDefine = new Instrument(process.argv[2]);
+    
+    var informationClass = {
+      uuid: this.uuid,
+      sound: this.sound,
+      date: this.date
+    }
     
     // Convert the object to string
-    const payload = JSON.stringify(instrumentDefine);
+    var payload = JSON.stringify(informationClass);
     
     // Create a measure object and serialize it to JSON
     // Send the payload via UDP (multicast)
