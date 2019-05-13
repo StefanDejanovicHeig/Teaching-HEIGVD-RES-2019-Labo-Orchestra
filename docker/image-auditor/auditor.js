@@ -42,10 +42,9 @@ s.on('message', function(msg, source) {
 });
 
 // Check all music that is listen
-var checkDate = schedule.scheduleJob('*/5 * * * * *', function(){
+var checkDate = schedule.scheduleJob('*/1 * * * * *', function(){
   musicianListen.forEach(function([intrument, dateSent, dateReceived], uuid, mapObj){
     if(moment().diff(dateReceived, 'second') > 5){
-      console.log("MAJ:")
       musicianListen.delete(uuid);
     }
   });
