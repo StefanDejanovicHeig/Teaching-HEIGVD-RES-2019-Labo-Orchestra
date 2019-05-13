@@ -45,6 +45,7 @@ s.on('message', function(msg, source) {
 var checkDate = schedule.scheduleJob('*/5 * * * * *', function(){
   musicianListen.forEach(function([intrument, dateSent, dateReceived], uuid, mapObj){
     if(moment().diff(dateReceived, 'second') > 5){
+      console.log("MAJ:")
       musicianListen.delete(uuid);
     }
   });
@@ -66,5 +67,6 @@ serverTCP.on('connection', function(socket){
   tcpToSend += "]";
   console.log("Sending: " + tcpToSend)
   socket.write(tcpToSend);
+  socket.write("\r\n");
   socket.end();
 })
